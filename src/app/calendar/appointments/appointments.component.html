@@ -1,0 +1,31 @@
+<div class="layout-main">
+    <div fxLayout="row">
+        <div fxFlex="30%">
+            <mat-card class="inline-calendar-card">
+                <mat-calendar #calendar (selectedChange)="selectChange($event)" [(selected)]="selectedDate">
+                </mat-calendar>
+            </mat-card>
+        </div>
+        <div fxLayout="column" class="schedule">
+            <div fxLayout="row" fxFlex="4.16%" class="hour-class" *ngFor="let hourModel of dayCalendarModel?.hourModel">
+                <h2>{{hourModel?.hour}}</h2>
+                <div class="minutes-class">
+                    <div fxLayout="row" *ngFor="let minuteModel of hourModel?.minutes">
+                        <div attr.data-id="{{hourModel?.hour + ':' + minuteModel?.minute}}"
+                            attr.data-occupied="{{minuteModel?.occupied}}" cdkDrag
+                            (cdkDragDropped)="drop($event, minuteModel.occupied, hourModel.hour, hourModel.duration)"
+                            title="Double click to delete and drag to organize"
+                            (dblclick)="eventClicked(minuteModel.occupied, hourModel.hour, hourModel.duration)"
+                            [style.background-color]="minuteModel?.occupied ? 'blue': 'inherit'">
+                            <h3>{{minuteModel?.minute}}</h3>
+                            <div class="description" *ngIf="minuteModel?.occupied">
+                                {{minuteModel.subject}} - {{minuteModel?.description}}
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

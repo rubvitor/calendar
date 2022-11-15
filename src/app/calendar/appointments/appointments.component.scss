@@ -1,0 +1,37 @@
+.inline-calendar-card {
+    width: 300px;
+  }
+
+  h3 {
+    font-size: xx-small;
+    height: 5px;
+  }
+
+  .layout-main {
+    height: 100%;
+  }
+
+  .minutes-class {
+    width: 100%;
+    padding-left: 10px;
+    div {
+      width: 100%;
+      hr {
+        border-top: 1px solid;
+      }
+    }
+  }
+
+  .hour-class {
+    padding-bottom: 20px;
+  }
+
+  .schedule {
+    width: 100%;
+  }
+
+  .description {
+    height: 5px;
+    font-size: xx-small;
+    color: #fff;
+  }

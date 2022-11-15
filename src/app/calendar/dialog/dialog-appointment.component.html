@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Appointment</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <div>
+            <mat-label>Subject</mat-label>
+            <input matInput [(ngModel)]="appointment.subject">
+        </div>
+        <br>
+        <div>
+            <mat-label>Description</mat-label>
+            <input matInput [(ngModel)]="appointment.description">
+        </div>
+        <br>
+        <div>
+            <mat-label>Hour</mat-label>
+            <input type="number" max="23" min="0" matInput [(ngModel)]="hour">
+        </div>
+        <br>
+        <div>
+            <mat-label>Duration (min)</mat-label>
+            <input type="number" matInput [(ngModel)]="appointment.durationMinutes">
+        </div>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="confirm()">Confirm</button>
+</div>
