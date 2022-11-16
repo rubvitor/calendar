@@ -17,7 +17,7 @@
                             attr.data-occupied="{{minuteModel?.occupied}}" cdkDrag
                             (cdkDragDropped)="drop($event, minuteModel.occupied, hourModel.hour, hourModel.duration)"
                             title="Double click to delete and drag to organize"
-                            (dblclick)="eventClicked(minuteModel.occupied, hourModel.hour, hourModel.duration)"
+                            (dblclick)="eventClicked(hourModel.hour, hourModel.minute, hourModel.duration)"
                             [style.background-color]="verifyAppointment(hourModel.hour, minuteModel.minute) ? 'rgb(60, 92, 199)': 'inherit'">
                             <h3>{{minuteModel?.minute}}</h3>
                             <div class="description" *ngIf="minuteModel?.occupied">

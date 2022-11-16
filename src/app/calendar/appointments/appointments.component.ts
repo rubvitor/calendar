@@ -8,6 +8,7 @@ import { AppointmentModel } from 'src/models/appointment.model';
 import { DayCalendarModel } from 'src/models/day.calendar-model';
 import { CalendarService } from 'src/services/calendar.service';
 import { DialogAppointmentComponent } from '../dialog/dialog-appointment.component';
+import { NotExpr } from '@angular/compiler';
 @Component({
   selector: 'app-appointments',
   templateUrl: './appointments.component.html',
@@ -27,7 +28,7 @@ export class AppointmentsComponent implements OnInit {
     private dialog: MatDialog) {
     this.appointments = calendarService.getAppointments();
     this.selectedDateFormat = new Date();
-    this.dayCalendarModel = new DayCalendarModel(this.selectedDateFormat);
+    this.dayCalendarModel = new DayCalendarModel(this.selectedDateFormat, this.appointments );
     this.selectedDate = moment(this.selectedDateFormat);
     this.appointmentSelected = new AppointmentModel(this.selectedDateFormat, 0, '', '');
   }
@@ -38,7 +39,7 @@ export class AppointmentsComponent implements OnInit {
 
   initialize(date: Date) {
     this.appointments = this.calendarService.getAppointments();
-    this.dayCalendarModel = new DayCalendarModel(date);
+    this.dayCalendarModel = new DayCalendarModel(date, this.appointments);
   }
 
   selectChange(date: Date): void {
@@ -74,11 +75,11 @@ export class AppointmentsComponent implements OnInit {
     });
   }
 
-  eventClicked(occupied: boolean, hour: number, duration: number) {
-    if (occupied) {
+  eventClicked(hour: number, minute: number, duration: number) {
+    if (this.verifyWithDuration(hour, minute, duration)) {
       if (confirm('Do you want to delete this appointment?') === true) {
         const dateParse = new Date(this.selectedDate.toString());
-        const dateDelete = new Date(dateParse.getFullYear(), dateParse.getMonth(), dateParse.getDate(), hour);
+        const dateDelete = new Date(dateParse.getFullYear(), dateParse.getMonth(), dateParse.getDate(), hour, minute);
 
         this.calendarService.deleteAppointement(dateDelete, duration);
         this.initialize(dateDelete);
@@ -87,15 +88,26 @@ export class AppointmentsComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<any>, occupied: boolean, hour: number, duration: number) {
+    debugger;
     if (occupied) {
       const a = event.container.data;
     }
   }
 
+  verifyWithDuration(hour: number, minute: number, duration: number) {
+    debugger;
+    const found = this.appointments.find(x => new Date(x.date).getDate() == new Date(this.selectedDateFormat).getDate() &&
+      new Date(x.date).getHours() === hour
+      && new Date(x.date).getMinutes() === minute
+      && x.durationMinutes === duration);
+
+    return found != undefined;
+  }
+
   verifyAppointment(hour: number, minute: number): boolean {
     const found = this.appointments.find(x => new Date(x.date).getDate() === new Date(this.selectedDateFormat).getDate()
       && (hour >= new Date(x.date).getHours() && hour <= new Date(x.endDate).getHours())
-        && minute >= new Date(x.date).getMinutes() && minute <= new Date(x.endDate).getMinutes());
+      && minute >= new Date(x.date).getMinutes() && minute <= new Date(x.endDate).getMinutes());
 
     return found != undefined;
   }
