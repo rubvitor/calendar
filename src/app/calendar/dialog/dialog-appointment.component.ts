@@ -10,7 +10,7 @@ import { CalendarService } from 'src/services/calendar.service';
 export class DialogAppointmentComponent implements OnInit {
 
   appointment: AppointmentModel;
-  hour: number;
+  time: string;
   constructor(private calendarService: CalendarService,
     public dialogRef: MatDialogRef<DialogAppointmentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AppointmentModel) {
@@ -18,7 +18,7 @@ export class DialogAppointmentComponent implements OnInit {
     this.appointment.subject = '';
     this.appointment.description = '';
     this.appointment.durationMinutes = 0;
-    this.hour = 0;
+    this.time = '';
   }
 
   ngOnInit(): void {
@@ -30,7 +30,11 @@ export class DialogAppointmentComponent implements OnInit {
   }
 
   confirm() {
-    const newDate = new Date(this.appointment.date.getFullYear(), this.appointment.date.getMonth(), this.appointment.date.getDate(), this.hour);
+    debugger;
+    const timeBreak = this.time.split(':');
+    const hour = Number(timeBreak[0]);
+    const minute = Number(timeBreak[1]);
+    const newDate = new Date(this.appointment.date.getFullYear(), this.appointment.date.getMonth(), this.appointment.date.getDate(), hour, minute);
     this.appointment.date = newDate;
     this.close();
   }

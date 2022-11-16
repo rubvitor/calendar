@@ -4,7 +4,7 @@ import { AppointmentModel } from "./appointment.model";
 export class DayCalendarModel {
     public hourModel: HourModel[];
     public date: Date;
-    constructor(dateCurrent: Date, appointments: AppointmentModel[]) {
+    constructor(dateCurrent: Date) {//, appointments: AppointmentModel[]) {
         this.hourModel = [];
         for (var i = 0; i < 24; i++) {
             this.hourModel.push(new HourModel());
@@ -15,19 +15,19 @@ export class DayCalendarModel {
             value.hour = index;
         });
 
-        const dayAppointements = appointments.filter(x => new Date(x.date).toDateString() === new Date(this.date).toDateString());
-        dayAppointements.forEach((appoint, index) => {
-            const hourFound = this.hourModel.find(x => x.hour === new Date(appoint.date)?.getHours());
-            if (hourFound) {
-                hourFound.duration = appoint.durationMinutes;
-                const dateMax = moment(this.date).add(appoint.durationMinutes, 'm').toDate();
-                hourFound.minutes.filter(x => x.minute >= new Date(appoint.date).getMinutes() && x.minute <= new Date(dateMax).getMinutes())?.forEach((minute, idxMinute) => {
-                    minute.description = appoint.description;
-                    minute.occupied = true;
-                    minute.subject = appoint.subject;
-                });
-            }
-        });
+        // const dayAppointements = appointments.filter(x => new Date(x.date).toDateString() === new Date(this.date).toDateString());
+        // dayAppointements.forEach((appoint, index) => {
+        //     const hourFound = this.hourModel.find(x => x.hour === new Date(appoint.date)?.getHours());
+        //     if (hourFound) {
+        //         hourFound.duration = appoint.durationMinutes;
+        //         const dateMax = moment(this.date).add(appoint.durationMinutes, 'm').toDate();
+        //         hourFound.minutes.filter(x => x.minute >= new Date(appoint.date).getMinutes() && x.minute <= new Date(dateMax).getMinutes())?.forEach((minute, idxMinute) => {
+        //             minute.description = appoint.description;
+        //             minute.occupied = true;
+        //             minute.subject = appoint.subject;
+        //         });
+        //     }
+        // });
     }
 }
 

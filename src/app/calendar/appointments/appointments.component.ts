@@ -17,15 +17,19 @@ export class AppointmentsComponent implements OnInit {
 
   @ViewChild('calendar') calendar: MatCalendar<Moment> | undefined;
   selectedDate: Moment;
+  selectedDateFormat: Date;
 
   dayCalendarModel: DayCalendarModel;
   appointmentSelected: AppointmentModel;
+  appointments: AppointmentModel[];
 
   constructor(private calendarService: CalendarService,
     private dialog: MatDialog) {
-    this.dayCalendarModel = new DayCalendarModel(new Date(), calendarService.getAppointments());
-    this.selectedDate = moment(new Date());
-    this.appointmentSelected = new AppointmentModel(new Date(), 0, '', '');
+    this.appointments = calendarService.getAppointments();
+    this.selectedDateFormat = new Date();
+    this.dayCalendarModel = new DayCalendarModel(this.selectedDateFormat);
+    this.selectedDate = moment(this.selectedDateFormat);
+    this.appointmentSelected = new AppointmentModel(this.selectedDateFormat, 0, '', '');
   }
 
   ngOnInit(): void {
@@ -33,10 +37,12 @@ export class AppointmentsComponent implements OnInit {
   }
 
   initialize(date: Date) {
-    this.dayCalendarModel = new DayCalendarModel(date, this.calendarService.getAppointments());
+    this.appointments = this.calendarService.getAppointments();
+    this.dayCalendarModel = new DayCalendarModel(date);
   }
 
   selectChange(date: Date): void {
+    this.selectedDateFormat = date;
     if (!this.appointmentSelected) {
       this.appointmentSelected = new AppointmentModel(new Date(), 0, '', '');
     }
@@ -81,11 +87,16 @@ export class AppointmentsComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<any>, occupied: boolean, hour: number, duration: number) {
-    debugger;
     if (occupied) {
-      debugger;
       const a = event.container.data;
     }
   }
 
+  verifyAppointment(hour: number, minute: number): boolean {
+    const found = this.appointments.find(x => new Date(x.date).getDate() === new Date(this.selectedDateFormat).getDate()
+      && (hour >= new Date(x.date).getHours() && hour <= new Date(x.endDate).getHours())
+        && minute >= new Date(x.date).getMinutes() && minute <= new Date(x.endDate).getMinutes());
+
+    return found != undefined;
+  }
 }

@@ -46,9 +46,9 @@ export class StorageCalendarDatabase {
   addAppointment(date: Date, duration: number, description: string, subject: string): boolean {
     if (this.verifyAvailability(date, duration)) {
       const appointements = this.getAppointments();
-
       appointements.push({
         date: date,
+        endDate: moment(date).add(duration, 'm').toDate(),
         description: description,
         subject: subject,
         durationMinutes: duration
@@ -68,7 +68,6 @@ export class StorageCalendarDatabase {
   }
 
   deleteAppointment(date: Date, duration: number): boolean {
-    debugger;
     let appointements = this.getAppointments();
     if (appointements && appointements.length > 0) {
       const appointmentsExistent = appointements.filter(x => new Date(x.date).toString() === date.toString() && duration === duration);
